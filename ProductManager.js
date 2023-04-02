@@ -31,8 +31,7 @@ class ProductManager {
     }
 
     this.products.push (newproduct);
-        console.log("Producto agregado con éxito");
-
+    console.log("Producto agregado con éxito");
         fs.writeFile(this.path, JSON.stringify(this.products), (err) => {
             if (err) throw err;
             console.log('Archivo guardado con éxito');
@@ -40,21 +39,23 @@ class ProductManager {
         
     }
 
-    getProducts() {
-        try {
-          const data = fs.promises.readFile(this.path, 'utf-8');
-          const products = JSON.parse(data);
-          return products;
-          console.log(products);
-        } catch (error) {
-          console.log(error);
-          return [];
-        }
+    async getProducts(products) {
+        const data = await fs.promises.readFile(this.path, 'utf-8'); 
+        const productsGet = JSON.parse(data);
+        return productsGet;
 
-        
-      }
+    /* try {
+        const data = fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        return products;
+        console.log(products);
+    } catch (error) {
+        console.log(error);
+        return [];
+        } */
+    }
 
-      async getProductById(productId) {
+    async getProductById(productId) {
         const data = await fs.promises.readFile(this.path, 'utf-8'); 
         this.products = JSON.parse(data);
         const product = this.products.find(product => product.id === productId);
@@ -65,28 +66,28 @@ class ProductManager {
         }
     }
 
-    async updateProduct(productId, updateData) {
+    /* async updateProduct(productId, updateData) {
         const productIndex = this.products.findIndex((product) => product.id === productId);
         if (productIndex === -1) {
-          console.error(`Error: product with id ${productId} not found`);
-          return;
+        console.error(`Error: product with id ${productId} not found`);
+        return;
         }
         const product = this.products[productIndex];
         Object.assign(product, updateData);
         this.products[productIndex] = product;
         await this.saveProducts();
-      }
+    }
+     */
     
-    
-      async deleteProduct(productId) {
+    /* async deleteProduct(productId) {
         const productIndex = this.products.findIndex((product) => product.id === productId);
         if (productIndex === -1) {
-          console.error(`Error: product with id ${productId} not found`);
-          return;
+        console.error(`Error: product with id ${productId} not found`);
+        return;
         }
         this.products.splice(productIndex, 1);
         await this.saveProducts();
-      }
+    } */
 }
 
 //ejemplos de uso
@@ -96,5 +97,5 @@ manager.addProduct("Pantalon", "Pantalon de seda", 3500, "imagen2.jpg", "PAN01",
 manager.addProduct("Zapatillas", "Zapatilla negra", 35000, "imagen3.jpg", "ZAP01", 1);
 //console.log(manager.getProducts());
 //console.log(manager.getProductById(2).title);
-console.log(manager.getProductById(2).description);
+//console.log(manager.getProductById(2).description);
 
