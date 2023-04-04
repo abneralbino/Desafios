@@ -39,55 +39,66 @@ class ProductManager {
         
     }
 
-    async getProducts(products) {
-        const data = await fs.promises.readFile(this.path, 'utf-8'); 
-        const productsGet = JSON.parse(data);
-        return productsGet;
-
-    /* try {
-        const data = fs.promises.readFile(this.path, 'utf-8');
-        const products = JSON.parse(data);
-        return products;
-        console.log(products);
-    } catch (error) {
-        console.log(error);
-        return [];
-        } */
+    async getProducts() {
+        try {
+            const data = await fs.promises.readFile(this.path, 'utf-8');
+            const products = JSON.parse(data);
+            console.log(products);
+            return products;
+        } catch (error) {
+            console.log(error);
+            return;
+        }
     }
 
     async getProductById(productId) {
         const data = await fs.promises.readFile(this.path, 'utf-8'); 
-        this.products = JSON.parse(data);
-        const product = this.products.find(product => product.id === productId);
+        const productsById = JSON.parse(data);
+        const product = productsById.find(product => product.id === productId);
         if (product) {
+            console.log(product);
             return product; // Return the product object, not just the ID
         } else {
             console.log("Error: producto no encontrado");
         }
+    } 
+
+    async updateProduct (productId, field, updateData) {
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        
+        const index = products.findIndex(product => product.id === productId);
+        if (index === -1) {
+            console.log('Error: producto no encontrado');
+            return;
+        }
+        products[index][field] = updateData;
+
+        fs.writeFile(this.path, JSON.stringify(products), err => {
+            if (err) throw err;
+            console.log('Producto actualizado con éxito desde updateProduct')
+        });
     }
 
-    /* async updateProduct(productId, updateData) {
-        const productIndex = this.products.findIndex((product) => product.id === productId);
-        if (productIndex === -1) {
-        console.error(`Error: product with id ${productId} not found`);
-        return;
+    async deleteProduct (deleteById){
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+
+        const deleteItemFilter = products.filter(product => product.id !== deleteById);
+
+        if (deleteItemFilter.length === products.length) {
+            console.log('Error: No se encontró producto con ID ${deleteById}');
+            return;
         }
-        const product = this.products[productIndex];
-        Object.assign(product, updateData);
-        this.products[productIndex] = product;
-        await this.saveProducts();
+
+        fs.writeFile(this.path, JSON.stringify(deleteItemFilter), err => {
+            if (err) throw err;
+            console.log('Producto borrado con éxito desde deleteProduct');
+        });
+        
     }
-     */
-    
-    /* async deleteProduct(productId) {
-        const productIndex = this.products.findIndex((product) => product.id === productId);
-        if (productIndex === -1) {
-        console.error(`Error: product with id ${productId} not found`);
-        return;
-        }
-        this.products.splice(productIndex, 1);
-        await this.saveProducts();
-    } */
+
+
 }
 
 //ejemplos de uso
@@ -95,7 +106,10 @@ const manager = new ProductManager();
 manager.addProduct("Camiseta", "camiseta de algodón", 1500, "imagen1.jpg", "CAM01", 1);
 manager.addProduct("Pantalon", "Pantalon de seda", 3500, "imagen2.jpg", "PAN01", 1);
 manager.addProduct("Zapatillas", "Zapatilla negra", 35000, "imagen3.jpg", "ZAP01", 1);
-//console.log(manager.getProducts());
-//console.log(manager.getProductById(2).title);
+console.log(manager.getProducts());
+manager.getProductById(4);
 //console.log(manager.getProductById(2).description);
+//console.log(manager.getProducts);
+//manager.updateProduct(4,'description', 'Zapatilla amarilla');
+//manager.deleteProduct(2);
 
