@@ -117,13 +117,15 @@ class ProductManager {
 
 }
 
-//ejemplos de uso
-const manager = new ProductManager();
-manager.addProduct("Camiseta", "camiseta de algodón", 1500, "imagen1.jpg", "CAM01", 1);
-manager.addProduct("Pantalon", "Pantalon de seda", 3500, "imagen2.jpg", "PAN01", 1);
-manager.addProduct("Zapatillas", "Zapatilla negra", 35000, "imagen3.jpg", "ZAP01", 1);
-
 module.exports = ProductManager;
+
+//ejemplos de uso
+//const manager = new ProductManager();
+//manager.addProduct("Camiseta", "camiseta de algodón", 1500, "imagen1.jpg", "CAM01", 1);
+//manager.addProduct("Pantalon", "Pantalon de seda", 3500, "imagen2.jpg", "PAN01", 1);
+//manager.addProduct("Zapatillas", "Zapatilla negra", 35000, "imagen3.jpg", "ZAP01", 1);
+
+
 
 //console.log(manager.getProducts());
 //manager.getProductById(4);

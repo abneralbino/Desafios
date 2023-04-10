@@ -22,7 +22,7 @@ app.get('/products', async (req, res) => {
 
         res.json(products);
     } catch (error) {
-        console.log(error);
+        return res.send(error);
     }
 });
 
@@ -33,16 +33,16 @@ app.get('/products/:pid', async (req, res) => {
 
     try {
         await productManager.load();
-        const product = await productManager.getProductById(productId);
+        const product = await productManager.getProductById(parseInt(productId));
 
         if (!product) {
-            console.log(`No se encontró ID ${productId}`);
+            return res.send(`No se encontró ID ${productId}`);
         } else {
             return res.send(product);
         }
 
     } catch (error) {
-        console.log(error);
+        return res.send(error);
     }
 }); 
 
